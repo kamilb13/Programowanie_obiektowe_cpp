@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+class Osoba
+{
+public:
+    string name;
+    string surname;
+    int age;
+
+    int input();
+
+    void przedstaw_sie()
+    {
+        cout << "Mam na imie: " << name << " " << surname << ". Mam " << age << " lat." << endl;
+    }
+    void idz()
+    {
+        cout << name << " " << surname << " idzie" << endl;
+    }
+    void mysl()
+    {
+        cout << name << " " << surname << " mysli" << endl;
+    }
+
+    friend ostream &operator<<(ostream &os, const Osoba &osoba)
+    {
+        os << osoba.name << "," << osoba.surname << "," << osoba.age << endl;
+        return os;
+    }
+};
+
+int Osoba::input()
+{
+    ofstream file;
+    file.open("plik.txt", ios::app);
+    Osoba Anna;
+    string imie = "Anna";
+    string nazwisko = "Karenina";
+    int wiek = 25;
+
+    Anna.name = imie;
+    Anna.surname = nazwisko;
+    Anna.age = wiek;
+
+    file << Anna;
+
+    Osoba Mikolaj;
+    imie = "Mikołaj";
+    nazwisko = "Kopernik";
+    wiek = 33;
+
+    Mikolaj.name = imie;
+    Mikolaj.surname = nazwisko;
+    Mikolaj.age = wiek;
+
+    file << Mikolaj;
+
+    file.close();
+    return 0;
+}
+
+int main()
+{
+    Osoba object;
+    object.input();
+    return 0;
+}

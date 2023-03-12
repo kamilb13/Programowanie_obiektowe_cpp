@@ -1,0 +1,43 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+class Osoba
+{
+    public:
+        string name;
+        string surname;
+        int age;
+
+    void przedstaw_sie()
+    {
+        cout << "Mam na imie: " << name << " " << surname << ". Mam " << age << " lat." << endl;
+    }
+    void idz()
+    {
+        cout << name << " " << surname << " idzie." << endl;
+    }
+    void mysl()
+    {
+        cout << name << " " << surname << " mysli." << endl;
+    }
+};
+
+int main()
+{
+    Osoba Anna;
+    string imie = "Anna";
+    string nazwisko = "Karenina";
+    int wiek = 25;
+    Anna.name = imie;
+    Anna.surname = nazwisko;
+    Anna.age = wiek;
+    Anna.mysl();
+    Anna.idz();
+    Anna.przedstaw_sie();
+    return 0;
+}
+
+

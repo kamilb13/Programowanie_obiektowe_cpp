@@ -1,0 +1,32 @@
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    ifstream file;
+    file.open("plik.txt");
+    if (!file.good()) {
+        cout << "Nie udalo sie otworzyc pliku.";
+        return 1;
+    }
+
+    int liczba, suma = 0, ile_liczb = 0;
+    while (file >> liczba) {
+        suma += liczba;
+        ile_liczb++;
+    }
+
+    file.close();
+
+    if (ile_liczb > 0) {
+        double srednia = static_cast<double>(suma) / ile_liczb;
+        cout << "Srednia liczb w pliku wynosi: " << srednia << endl;
+    } else {
+        cout << "Plik jest pusty." << endl;
+    }
+
+    return 0;
+}
+
+

@@ -1,0 +1,23 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    string line;
+    ofstream file;
+    file.open("plik.txt");
+    cout << "Wpisuj zdania. Aby zakonczyc wpisz: END." << endl;
+    while(true)
+    {
+        getline(cin, line);
+        if(line == "END")
+            break;
+        file << line << endl;
+    }
+    file.close();
+    cout << "Zapisano dane do pliku 'plik.txt'\n";
+    return 0;
+}
+

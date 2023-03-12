@@ -1,0 +1,24 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int main()
+{
+    int array[10];
+    ofstream file("plik.txt",ios::binary);
+    srand(time(NULL));
+    int i;
+    for(i = 0; i < 10; i++)
+    {
+        int liczba = rand()%101;
+        cout << liczba << " ";
+        file.write(reinterpret_cast<const char*>(&liczba), sizeof(&liczba));
+    }
+    file.close();
+    cout << "\nZapisano dane do pliku 'plik.bin'\n" << endl;
+    return 0;
+}
+

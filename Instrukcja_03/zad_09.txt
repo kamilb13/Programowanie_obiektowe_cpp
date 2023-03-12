@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+class Osoba
+{
+    public:
+        string name;
+        string surname;
+        int age;
+
+    int input();
+    int read_osoba();
+
+    void przedstaw_sie()
+    {
+        cout << "Mam na imie: " << name << " " << surname << ". Mam " << age << " lat." << endl;
+    }
+    void idz()
+    {
+        cout << name << " " << surname << " idzie" << endl;
+    }
+    void mysl()
+    {
+        cout << name << " " << surname << " mysli" << endl;
+    }
+};
+
+int Osoba::input()
+{
+    ofstream file;
+    file.open("plik.txt", ios::app);
+    Osoba v1;
+    string imie = "Anna";
+    string nazwisko = "Karenina";
+    int wiek = 25;
+
+    v1.name = imie;
+    v1.surname = nazwisko;
+    v1.age = wiek;
+
+    file.write((char*)&v1, sizeof(v1));
+    Osoba Mikolaj;
+    imie = "Mikołaj";
+    nazwisko = "Kopernik";
+    wiek = 33;
+    file.write((char*)&Mikolaj, sizeof(Mikolaj));
+
+    file.close();
+    return 0;
+}
+
+int Osoba::read_osoba()
+{
+    string line;
+    ifstream file("plik.txt");
+    if(file.is_open())
+    {
+        while(getline(file,line))
+            cout << line << endl;
+        file.close();
+    }else
+    {
+        cout << "Nie udalo sie otworzyc pliku." << endl;
+    }
+}
+
+
+int main()
+{
+    Osoba object;
+    object.input();
+    object.read_osoba();
+    return 0;
+}
+
+

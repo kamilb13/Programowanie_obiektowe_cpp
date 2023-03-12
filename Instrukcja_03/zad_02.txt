@@ -1,0 +1,23 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    string line;
+    ifstream file("plik.txt");
+
+    if(file.is_open())
+    {
+        while(getline(file,line))
+            cout << line << endl;
+        file.close();
+    }else
+    {
+        cout << "Nie udalo sie otworzyc pliku." << endl;
+    }
+    return 0;
+}
+
+

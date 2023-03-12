@@ -1,0 +1,33 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    ifstream input_file("plik.bin", std::ios::binary);
+
+    if (!input_file.is_open()) {
+        cerr << "Nie udalo sie otworzyc pliku!\n";
+        return 1;
+    }
+    input_file.seekg(0, ios::end);
+    streampos file_size = input_file.tellg();
+    input_file.seekg(0, ios::beg);
+    vector<char> file_data(file_size);
+
+    input_file.read(file_data.data(), file_size);
+
+    if (!input_file) {
+        cerr << "Blad odczytu pliku!\n";
+        return 1;
+    }
+    input_file.close();
+
+    for (char c : file_data) {
+        cout << c;
+    }
+    return 0;
+}
+
+
