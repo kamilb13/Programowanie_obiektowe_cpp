@@ -2,32 +2,30 @@
 #include <fstream>
 #include <vector>
 
-using namespace std;
-
 int main() {
-    ifstream input_file("plik.bin", std::ios::binary);
+    std::string filename = "C:\\Users\\kamil\\Desktop\\piaskownica_cpp\\LAB02_ZAD_03\\dane.bin";
+    std::ifstream input(filename, std::ios::binary);
 
-    if (!input_file.is_open()) {
-        cerr << "Nie udalo sie otworzyc pliku!\n";
+    if (!input){
+        std::cerr << "Nie udaao sie otworzyc pliku do odczytu!" << std::endl;
         return 1;
     }
-    input_file.seekg(0, ios::end);
-    streampos file_size = input_file.tellg();
-    input_file.seekg(0, ios::beg);
-    vector<char> file_data(file_size);
 
-    input_file.read(file_data.data(), file_size);
 
-    if (!input_file) {
-        cerr << "Blad odczytu pliku!\n";
-        return 1;
+    input.seekg(0, std::ios::end);
+    std::streampos fileSize = input.tellg();
+    input.seekg(0, std::ios::beg);
+
+    std::vector<char> buffer(fileSize);
+
+    input.read(buffer.data(), fileSize);
+
+    input.close();
+
+    std::cout << "Odczytano " << fileSize << " bajtow z pliku " << filename << ":" << std::endl;
+    for (char c : buffer) {
+        std::cout << std::hex << static_cast<int>(c) << " ";
     }
-    input_file.close();
 
-    for (char c : file_data) {
-        cout << c;
-    }
     return 0;
 }
-
-
