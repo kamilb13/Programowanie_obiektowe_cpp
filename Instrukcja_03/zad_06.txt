@@ -1,32 +1,37 @@
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <numeric>
+#include <string>
 
 using namespace std;
 
 int main() {
-    ifstream file;
-    file.open("plik.txt");
-    if (!file.good()) {
-        cout << "Nie udalo sie otworzyc pliku.";
+    std::string filename = "C:\\Users\\kamil\\Desktop\\piaskownica_cpp\\liczby.txt";
+    std::ifstream input(filename);
+
+    if(!input){
+        std::cerr << "Nie udalo sie otworzyc pliku do odczytu!" << std::endl;
         return 1;
     }
 
-    int liczba, suma = 0, ile_liczb = 0;
-    while (file >> liczba) {
-        suma += liczba;
-        ile_liczb++;
+    std::vector<int> numbers;
+
+    int number;
+    while(input >> number){
+        numbers.push_back(number);
     }
 
-    file.close();
+    input.close();
 
-    if (ile_liczb > 0) {
-        double srednia = static_cast<double>(suma) / ile_liczb;
-        cout << "Srednia liczb w pliku wynosi: " << srednia << endl;
-    } else {
-        cout << "Plik jest pusty." << endl;
+    if(numbers.empty()){
+        std::cerr << "Plik nie zawiera zadnych liczb!" << std::endl;
+        return 1;
     }
+
+    double average = static_cast<double>(std::accumulate(numbers.begin(), numbers.end(), 0)) / numbers.size();
+
+    std::cout << "Srednia liczb w pliku to: " << average << std::endl;
 
     return 0;
 }
-
-
