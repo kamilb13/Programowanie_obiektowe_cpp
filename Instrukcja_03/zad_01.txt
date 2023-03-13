@@ -1,23 +1,32 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
-using namespace std;
+int main() {
+    std::string filename = "dane.txt";
+    std::string sekwencja_konczaca = "KONIEC";
 
-int main()
-{
-    string line;
-    ofstream file;
-    file.open("plik.txt");
-    cout << "Wpisuj zdania. Aby zakonczyc wpisz: END." << endl;
-    while(true)
-    {
-        getline(cin, line);
-        if(line == "END")
-            break;
-        file << line << endl;
+    std::ofstream output(filename);
+
+    if (!output){
+        std::cerr << "Nie udalo sie otworzyc pliku do zapisu!" << std::endl;
+        return 1;
     }
-    file.close();
-    cout << "Zapisano dane do pliku 'plik.txt'\n";
+
+    std::string line;
+    do {
+        std::cout << "Podaj linie tekstu (Wpisanie KONIEC konczy program): ";
+        std::getline(std::cin, line);
+
+        if (line != sekwencja_konczaca){
+            output << line << std::endl;
+        }
+
+    } while (line != sekwencja_konczaca);
+
+    std::cout << "Wpisywanie linii zakonczone. Dane zostaly zapisane do pliku " << filename << std::endl;
+
+    output.close();
+
     return 0;
 }
-
