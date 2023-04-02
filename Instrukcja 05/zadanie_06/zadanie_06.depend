@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1679930615 source:d:\kamil brzoza\lab_05\zadanie_06\main.cpp
+	<iostream>
+	<vector>
+	<algorithm>
+
