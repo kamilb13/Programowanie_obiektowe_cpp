@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1682270604 source:c:\users\pc\desktop\instrukcja_08\zad_04\main.cpp
+	<iostream>
+	<locale.h>
+
