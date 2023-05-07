@@ -1,0 +1,147 @@
+#include <wx/wx.h>
+#include <wx/sizer.h>
+
+class MyFrame : public wxFrame
+{
+public:
+    MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator", wxDefaultPosition, wxSize(600, 300))
+    {
+        // Tworzenie kontrolek
+        m_textCtrl1 = new wxTextCtrl(this, wxID_ANY, "");
+        m_textCtrl2 = new wxTextCtrl(this, wxID_ANY, "");
+        m_buttonAdd = new wxButton(this, wxID_ANY, "+");
+        m_buttonSub = new wxButton(this, wxID_ANY, "-");
+        m_buttonMul = new wxButton(this, wxID_ANY, "*");
+        m_buttonDiv = new wxButton(this, wxID_ANY, "/");
+        m_textResult = new wxTextCtrl(this, wxID_ANY, "");
+
+        // Tworzenie sizerów
+        wxBoxSizer *hBox1 = new wxBoxSizer(wxHORIZONTAL);
+        wxBoxSizer *hBox2 = new wxBoxSizer(wxHORIZONTAL);
+        wxBoxSizer *hBox3 = new wxBoxSizer(wxHORIZONTAL);
+        wxBoxSizer *vBox = new wxBoxSizer(wxVERTICAL);
+
+        // Dodawanie kontrolek do sizerów
+        hBox1->Add(new wxStaticText(this, wxID_ANY, "Liczba 1:"), 0, wxALL, 5);
+        hBox1->Add(m_textCtrl1, 1, wxALL, 5);
+        hBox2->Add(new wxStaticText(this, wxID_ANY, "Liczba 2:"), 0, wxALL, 5);
+        hBox2->Add(m_textCtrl2, 1, wxALL, 5);
+        hBox3->Add(m_buttonAdd, 1, wxALL, 5);
+        hBox3->Add(m_buttonSub, 1, wxALL, 5);
+        hBox3->Add(m_buttonMul, 1, wxALL, 5);
+        hBox3->Add(m_buttonDiv, 1, wxALL, 5);
+        vBox->Add(hBox1, 0, wxEXPAND);
+        vBox->Add(hBox2, 0, wxEXPAND);
+        vBox->Add(hBox3, 0, wxEXPAND);
+        vBox->Add(m_textResult, 1, wxALL | wxEXPAND, 5);
+
+        // Ustawienie sizerów dla okna
+        SetSizer(vBox);
+
+        // Obsługa zdarzeń dla przycisków
+        m_buttonAdd->Bind(wxEVT_BUTTON, &MyFrame::OnAddClicked, this);
+        m_buttonSub->Bind(wxEVT_BUTTON, &MyFrame::OnSubClicked, this);
+        m_buttonMul->Bind(wxEVT_BUTTON, &MyFrame::OnMulClicked, this);
+        m_buttonDiv->Bind(wxEVT_BUTTON, &MyFrame::OnDivClicked, this);
+    }
+
+private:
+    wxTextCtrl *m_textCtrl1;
+    wxTextCtrl *m_textCtrl2;
+    wxButton *m_buttonAdd;
+    wxButton *m_buttonSub;
+    wxButton *m_button;
+    wxButton *m_buttonMul;
+    wxButton *m_buttonDiv;
+    wxTextCtrl *m_textResult;
+
+    void OnAddClicked(wxCommandEvent& event)
+    {
+        double num1, num2;
+        wxString str1 = m_textCtrl1->GetValue();
+        wxString str2 = m_textCtrl2->GetValue();
+        if (str1.ToDouble(&num1) && str2.ToDouble(&num2))
+        {
+            double result = num1 + num2;
+            m_textResult->SetValue(wxString::Format("%.2f", result));
+        }
+        else
+        {
+            m_textResult->SetValue("Błąd!");
+        }
+    }
+
+    void OnSubClicked(wxCommandEvent& event)
+    {
+        double num1, num2;
+        wxString str1 = m_textCtrl1->GetValue();
+        wxString str2 = m_textCtrl2->GetValue();
+
+        if (str1.ToDouble(&num1) && str2.ToDouble(&num2))
+        {
+            double result = num1 - num2;
+            m_textResult->SetValue(wxString::Format("%.2f", result));
+        }
+        else
+        {
+            m_textResult->SetValue("Błąd!");
+        }
+    }
+
+    void OnMulClicked(wxCommandEvent& event)
+    {
+        double num1, num2;
+        wxString str1 = m_textCtrl1->GetValue();
+        wxString str2 = m_textCtrl2->GetValue();
+
+        if (str1.ToDouble(&num1) && str2.ToDouble(&num2))
+        {
+            double result = num1 * num2;
+            m_textResult->SetValue(wxString::Format("%.2f", result));
+        }
+        else
+        {
+            m_textResult->SetValue("Błąd!");
+        }
+    }
+
+    void OnDivClicked(wxCommandEvent& event)
+    {
+        double num1, num2;
+        wxString str1 = m_textCtrl1->GetValue();
+        wxString str2 = m_textCtrl2->GetValue();
+
+        if (str1.ToDouble(&num1) && str2.ToDouble(&num2) && num2 != 0)
+        {
+            double result = num1 / num2;
+            m_textResult->SetValue(wxString::Format("%.2f", result));
+        }
+        else
+        {
+            m_textResult->SetValue("Błąd!");
+        }
+    }
+
+    wxDECLARE_EVENT_TABLE();
+};
+
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_BUTTON(wxID_ANY, MyFrame::OnAddClicked)
+    EVT_BUTTON(wxID_ANY, MyFrame::OnSubClicked)
+    EVT_BUTTON(wxID_ANY, MyFrame::OnMulClicked)
+    EVT_BUTTON(wxID_ANY, MyFrame::OnDivClicked)
+wxEND_EVENT_TABLE()
+
+class MyApp : public wxApp
+{
+public:
+    virtual bool OnInit()
+    {
+        MyFrame *frame = new MyFrame();
+        frame->Show(true);
+        return true;
+    }
+};
+
+wxIMPLEMENT_APP(MyApp);
+

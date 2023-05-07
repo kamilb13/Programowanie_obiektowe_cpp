@@ -1,0 +1,183 @@
+#include <wx/wx.h>
+#include <wx/sizer.h>
+
+class ComplexNumber
+{
+public:
+    ComplexNumber(double real = 0.0, double imaginary = 0.0)
+        : m_real(real), m_imaginary(imaginary)
+    {
+    }
+
+    double GetReal() const { return m_real; }
+    double GetImaginary() const { return m_imaginary; }
+
+    ComplexNumber operator+(const ComplexNumber& other) const
+    {
+        return ComplexNumber(m_real + other.m_real, m_imaginary + other.m_imaginary);
+    }
+
+    ComplexNumber operator-(const ComplexNumber& other) const
+    {
+        return ComplexNumber(m_real - other.m_real, m_imaginary - other.m_imaginary);
+    }
+
+    ComplexNumber operator*(const ComplexNumber& other) const
+    {
+        double real = m_real * other.m_real - m_imaginary * other.m_imaginary;
+        double imaginary = m_real * other.m_imaginary + m_imaginary * other.m_real;
+        return ComplexNumber(real, imaginary);
+    }
+
+    ComplexNumber operator/(const ComplexNumber& other) const
+    {
+        double denominator = other.m_real * other.m_real + other.m_imaginary * other.m_imaginary;
+        double real = (m_real * other.m_real + m_imaginary * other.m_imaginary) / denominator;
+        double imaginary = (m_imaginary * other.m_real - m_real * other.m_imaginary) / denominator;
+        return ComplexNumber(real, imaginary);
+    }
+
+private:
+    double m_real;
+    double m_imaginary;
+};
+
+class MyFrame : public wxFrame
+{
+public:
+    MyFrame(const wxString& title)
+        : wxFrame(NULL, wxID_ANY, title)
+    {
+        // Create sizers
+        wxBoxSizer* sizerVertical = new wxBoxSizer(wxVERTICAL);
+        wxGridSizer* sizerGrid = new wxGridSizer(4, 3, 5, 5);
+
+        // Create text controls for real and imaginary parts of first number
+        wxStaticText* labelNum1 = new wxStaticText(this, wxID_ANY, "Number 1:");
+        m_real1 = new wxTextCtrl(this, wxID_ANY, "");
+        m_imaginary1 = new wxTextCtrl(this, wxID_ANY, "");
+
+        // Add them to grid sizer
+        sizerGrid->Add(labelNum1, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT);
+        sizerGrid->Add(m_real1, 0, wxEXPAND);
+        sizerGrid->Add(new wxStaticText(this, wxID_ANY, "+"), 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);
+        sizerGrid->Add(m_imaginary1, 0, wxEXPAND);
+        sizerGrid->Add(new wxStaticText(this, wxID_ANY, "i"), 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);
+
+        // Create text controls for real and imaginary parts of second number
+        wxStaticText* labelNum2 = new wxStaticText(this, wxID_ANY, "Number 2:");
+        m_real2 = new wxTextCtrl(this, wxID_ANY, "");
+        m_imaginary2 = new wxTextCtrl(this, wxID_ANY, "");
+
+        // Add them to grid sizer
+        sizerGrid->Add(labelNum2, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT);
+    sizerGrid->Add(m_real2, 0, wxEXPAND);
+    sizerGrid->Add(new wxStaticText(this, wxID_ANY, "+"), 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);
+    sizerGrid->Add(m_imaginary2, 0, wxEXPAND);
+    sizerGrid->Add(new wxStaticText(this, wxID_ANY, "i"), 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);
+
+    // Create buttons for addition, subtraction, multiplication and division
+    m_buttonAdd = new wxButton(this, wxID_ANY, "+");
+    m_buttonSubtract = new wxButton(this, wxID_ANY, "-");
+    m_buttonMultiply = new wxButton(this, wxID_ANY, "*");
+    m_buttonDivide = new wxButton(this, wxID_ANY, "/");
+
+    // Bind button events to member functions
+    m_buttonAdd->Bind(wxEVT_BUTTON, &MyFrame::OnAddClicked, this);
+    m_buttonSubtract->Bind(wxEVT_BUTTON, &MyFrame::OnSubtractClicked, this);
+    m_buttonMultiply->Bind(wxEVT_BUTTON, &MyFrame::OnMultiplyClicked, this);
+    m_buttonDivide->Bind(wxEVT_BUTTON, &MyFrame::OnDivideClicked, this);
+
+    // Add buttons to grid sizer
+    sizerGrid->Add(m_buttonAdd, 0, wxEXPAND);
+    sizerGrid->Add(m_buttonSubtract, 0, wxEXPAND);
+    sizerGrid->Add(m_buttonMultiply, 0, wxEXPAND);
+    sizerGrid->Add(m_buttonDivide, 0, wxEXPAND);
+
+    // Create result text control
+    m_result = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+
+    // Add grid sizer and result text control to vertical sizer
+    sizerVertical->Add(sizerGrid, 1, wxEXPAND | wxALL, 10);
+    sizerVertical->Add(m_result, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+
+    // Set the main sizer for the frame
+    SetSizer(sizerVertical);
+}
+private:
+// Text controls for real and imaginary parts of first number
+wxTextCtrl* m_real1;
+wxTextCtrl* m_imaginary1;
+// Text controls for real and imaginary parts of second number
+wxTextCtrl* m_real2;
+wxTextCtrl* m_imaginary2;
+
+// Buttons for addition, subtraction, multiplication and division
+wxButton* m_buttonAdd;
+wxButton* m_buttonSubtract;
+wxButton* m_buttonMultiply;
+wxButton* m_buttonDivide;
+
+// Result text control
+wxTextCtrl* m_result;
+
+// Event handlers for button clicks
+void OnAddClicked(wxCommandEvent& event)
+{
+    ComplexNumber num1(wxAtof(m_real1->GetValue()), wxAtof(m_imaginary1->GetValue()));
+    ComplexNumber num2(wxAtof(m_real2->GetValue()), wxAtof(m_imaginary2->GetValue()));
+    ComplexNumber result = num1 + num2;
+    m_result->SetValue(wxString::Format("%.2f + %.2fi", result.GetReal(), result.GetImaginary()));
+}
+
+void OnSubtractClicked(wxCommandEvent& event)
+{
+    ComplexNumber num1(wxAtof(m_real1->GetValue()), wxAtof(m_imaginary1->GetValue()));
+    ComplexNumber num2(wxAtof(m_real2->GetValue()), wxAtof(m_imaginary2->GetValue()));
+    ComplexNumber result = num1 - num2;
+    m_result->SetValue(wxString::Format("%.2f + %.2fi", result.GetReal(), result.GetImaginary()));
+}
+
+void OnMultiplyClicked(wxCommandEvent& event)
+{
+    ComplexNumber num1(wxAtof(m_real1->GetValue()), wxAtof(m_imaginary1->GetValue()));
+    ComplexNumber num2(wxAtof(m_real2->GetValue()), wxAtof(m_imaginary2->GetValue()));
+    ComplexNumber result = num1 * num2;
+    m_result->SetValue(wxString::Format("%.2f + %.2fi", result.GetReal(), result.GetImaginary()));
+}
+
+void OnDivideClicked(wxCommandEvent& event)
+{
+    ComplexNumber num1(wxAtof(m_real1->GetValue()), wxAtof(m_imaginary1->GetValue()));
+    ComplexNumber num2(wxAtof(m_real2->GetValue()), wxAtof(m_imaginary2->GetValue()));
+    ComplexNumber result = num1 / num2;
+    m_result->SetValue(wxString::Format("%.2f + %.2fi", result.GetReal(), result.GetImaginary()));
+}
+
+DECLARE_EVENT_TABLE()
+};
+
+// Event table for MyFrame class
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_BUTTON(wxID_ANY, MyFrame::OnAddClicked)
+EVT_BUTTON(wxID_ANY, MyFrame::OnSubtractClicked)
+EVT_BUTTON(wxID_ANY, MyFrame::OnMultiplyClicked)
+EVT_BUTTON(wxID_ANY, MyFrame::OnDivideClicked)
+END_EVENT_TABLE()
+
+// Define the application class
+class MyApp : public wxApp
+{
+public:
+virtual bool OnInit()
+{
+// Create and show the main frame
+MyFrame* frame = new MyFrame("Complex Number Calculator");
+frame->Show(true);
+
+   return true;
+}
+};
+
+// Start the application
+IMPLEMENT_APP(MyApp)

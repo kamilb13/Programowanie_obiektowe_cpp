@@ -1,0 +1,19 @@
+#include <wx/wx.h>
+
+class MyFrame : public wxFrame
+{
+public:
+    MyFrame() : wxFrame(NULL, wxID_ANY, "Okno", wxDefaultPosition, wxSize(200, 200)){}
+};
+
+class MyApp : public wxApp{
+public:
+    virtual bool OnInit(){
+        MyFrame *frame = new MyFrame();
+        frame->SetPosition(wxPoint(50, 50));
+        frame->Show(true);
+        return true;
+    }
+};
+
+wxIMPLEMENT_APP(MyApp);
